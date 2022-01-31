@@ -1,15 +1,15 @@
 package baseball
 
 import game.GameIO
+import game.GameInfo
 import game.IGame
 import game.GameName
+import game.save.GameSave
 
 @GameName(name = "야구게임")
 class BaseBall : IGame {
 
     /*
-    게임이름: 야구게임
-
     ### 플레이방법 ###
     총 9번동안의 기회를 줌
     해당 9번 안에 랜덤으로 정해진 숫자 3개 (0~9)
@@ -23,9 +23,11 @@ class BaseBall : IGame {
     private var life = -1 // 목숨
     private var balls = arrayListOf(-1) // 랜덤한 공들을 저장하는 리스트
     private var finish = false
+    private var count = -1 // n회말
 
     override fun init() {
         life = 9
+        count = 1
         balls.clear()
         finish = false
     }
@@ -35,7 +37,6 @@ class BaseBall : IGame {
         CheckBall.init(balls)
         while (life > 0 && !finish) {
             gameStep()
-            println(finish)
         }
         val saveWhether = gameEnd()
         val save = saveWhether.equals("Y")
@@ -59,17 +60,10 @@ class BaseBall : IGame {
     }
 
     override fun gameStep() {
-        GameIO.output("${life}회말")
+        GameIO.output("${count}회말")
         val userInput = GameIO.input()
         val ball = CheckBall.getBalls(userInput)
         val strike = CheckBall.getStrike(userInput)
-
-        if (CheckBall.isOut(userInput)) {
-            // 만일 아웃일 경우
-            GameIO.output("아웃입니다.")
-            life--
-            return
-        }
 
         if (CheckBall.isAllStrike(userInput)) {
             // 전부 스트라이크인 경우
@@ -78,8 +72,15 @@ class BaseBall : IGame {
             return
         }
 
-        GameIO.output("${strike}S ${ball}B")
+        if (CheckBall.isOut(userInput)) {
+            // 만일 아웃일 경우
+            GameIO.output("아웃입니다.")
+        }
+        else {
+            GameIO.output("${strike}S ${ball}B")
+        }
         life--
+        count++
     }
 
     override fun gameEnd() : String? {
@@ -96,6 +97,13 @@ class BaseBall : IGame {
     }
 
     override fun gameSave() {
-        TODO("Not yet implemented")
+        // 몇 번만에 맞추셨습니다. / 결국 못 맞추었습니다. (결과)
+        val text = if (finish) {
+            "${life}만에 맞추셨습니다."
+        } else {
+            "결국 못 맞추셨습니다. $balls"
+        }
+
+        GameSave.save(GameInfo.getGameName(BaseBall()), text)
     }
 }

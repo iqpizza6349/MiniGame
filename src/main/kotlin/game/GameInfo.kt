@@ -22,6 +22,10 @@ class GameInfo {
             game?.init()
             game?.gameStart()
         }
+
+        fun getGameName(game: IGame) : String {
+            return game.javaClass.getAnnotation(GameName::class.java).name
+        }
     }
 
 }
