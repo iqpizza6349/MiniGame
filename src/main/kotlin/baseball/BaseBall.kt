@@ -1,10 +1,8 @@
 package baseball
 
 import game.GameIO
-import game.GameInfo
 import game.IGame
 import game.GameName
-import game.save.GameSave
 
 @GameName(name = "야구게임")
 class BaseBall : IGame {
@@ -67,7 +65,7 @@ class BaseBall : IGame {
 
     override fun gameStep() {
         GameIO.output("${count}회말")
-        val userInput = GameIO.input()
+        val userInput = GameIO.input(true)
         val ball = CheckBall.getBalls(userInput)
         val strike = CheckBall.getStrike(userInput)
 

@@ -11,7 +11,16 @@ class GameLog {
      */
 
     companion object {
+        var gameLogs = arrayListOf<String>()
         
+        fun writeLog(logs: List<String>) {
+            gameLogs.addAll(logs)
+        }
+
+        fun readLogs() : List<String> {
+            return gameLogs
+        }
+
     }
 
 

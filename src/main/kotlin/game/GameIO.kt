@@ -1,6 +1,7 @@
 package game
 
 import baseball.BaseBall
+import game.save.GameLog
 import game.save.GameSave
 import updown.UpDown
 
@@ -8,17 +9,17 @@ class GameIO {
 
     companion object {
 
-        var inputLogs = arrayListOf<Int>()
-
-        fun input() : List<Int> {
+        fun input(isLog: Boolean) : List<Int> {
             val values: List<String> = readLine()?.split(" ") ?: return arrayListOf()
-            val integers = arrayListOf(-1);
+            if (isLog) {
+                GameLog.writeLog(values)
+            }
+            val integers = arrayListOf(-1)
             integers.clear()
 
             for (v in values) {
                 integers.add(v.toInt())
             }
-            inputLogs.addAll(integers)
 
             return integers
         }
@@ -61,6 +62,8 @@ class GameIO {
             } else {
                 "\n${UpDown.randomValue}"
             }
+
+            text += "\n" + GameLog.readLogs()
 
             GameSave.save(GameInfo.getGameName(game), text)
         }

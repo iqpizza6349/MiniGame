@@ -26,7 +26,7 @@ class UpDown : IGame {
     override fun init() {
         count = 0
         finish = false
-        val input = GameIO.input()
+        val input = GameIO.input(false)
         life = input[0]
 
         val i = input[1]
@@ -50,7 +50,7 @@ class UpDown : IGame {
 
     override fun gameStep() {
         GameIO.output("${count + 1}번째 기회")
-        val input = GameIO.input()[0]
+        val input = GameIO.input(true)[0]
         val checkIndex = CheckIndex.compare(input)
 
         if (checkIndex == 0) {
