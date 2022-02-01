@@ -1,12 +1,13 @@
 package game
 
 import baseball.BaseBall
+import updown.UpDown
 
 class GameInfo {
 
     companion object {
         fun getGame(name: String?): IGame? {
-            val gameList = arrayListOf(BaseBall())
+            val gameList = arrayListOf(BaseBall(), UpDown())
 
             for (game in gameList) {
                 val gameName: GameName = game.javaClass.getAnnotation(GameName::class.java)

@@ -20,8 +20,11 @@ class BaseBall : IGame {
     숫자와 위치가 전부 틀릴 경우 -> Out
      */
 
+    companion object {
+        var balls = arrayListOf(-1) // 랜덤한 공들을 저장하는 리스트
+    }
+
     private var life = -1 // 목숨
-    private var balls = arrayListOf(-1) // 랜덤한 공들을 저장하는 리스트
     private var finish = false
     private var count = -1 // n회말
 
@@ -52,9 +55,12 @@ class BaseBall : IGame {
     }
 
     private fun randomBall() {
-        var number = (Math.random() * 10).toInt()
+        val temp = (Math.random() * 10).toInt()
+        var number = if (temp == 10) 9 else temp
+
         while (balls.contains(number)) {
-            number = (Math.random() * 10).toInt()
+            val t = (Math.random() * 10).toInt()
+            number = if (t == 10) 9 else t
         }
         balls.add(number)
     }
@@ -84,26 +90,10 @@ class BaseBall : IGame {
     }
 
     override fun gameEnd() : String? {
-        GameIO.output("게임 종료")
-        val result = if (finish) "승" else "패"
-
-        if (!finish) {
-            GameIO.output("정답은 $balls 입니다.")
-        }
-
-        GameIO.output("게임 결과: $result")
-        GameIO.output("게임을 저장하시겠습니까? (Y/N)")
-        return readLine()
+        return GameIO.randomGameResult(finish, this)
     }
 
     override fun gameSave() {
-        // 몇 번만에 맞추셨습니다. / 결국 못 맞추었습니다. (결과)
-        val text = if (finish) {
-            "${life}만에 맞추셨습니다."
-        } else {
-            "결국 못 맞추셨습니다. $balls"
-        }
-
-        GameSave.save(GameInfo.getGameName(BaseBall()), text)
+        GameIO.randomGameSave(finish, count, this)
     }
 }
