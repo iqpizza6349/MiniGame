@@ -27,6 +27,11 @@ class GameIO {
         fun output(text: String) {
             println(text)
         }
+        
+        fun output(text: String, delay: Long) {
+            output(text)
+            Thread.sleep(delay)
+        }
 
         fun randomGameResult(finish: Boolean, game: IGame) : String? {
             output("게임 종료")

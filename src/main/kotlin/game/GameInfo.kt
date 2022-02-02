@@ -1,6 +1,7 @@
 package game
 
 import baseball.BaseBall
+import feedcat.FeedCat
 import rpg.TextRPG
 import updown.UpDown
 
@@ -8,7 +9,7 @@ class GameInfo {
 
     companion object {
         fun getGame(name: String?): IGame? {
-            val gameList = arrayListOf(BaseBall(), UpDown(), TextRPG())
+            val gameList = arrayListOf(BaseBall(), UpDown(), TextRPG(), FeedCat())
 
             for (game in gameList) {
                 val gameName: GameName = game.javaClass.getAnnotation(GameName::class.java)
