@@ -1,6 +1,7 @@
 package rpg
 
 import game.GameIO
+import game.save.GameLog
 import rpg.entity.Entity
 import rpg.entity.player.Player
 import rpg.map.Map
@@ -42,7 +43,7 @@ class Adventure {
             GameIO.output(target.info())
 
             GameIO.output("1. 공격 / 2. 방어")
-            val action = GameIO.input(true)[0]
+            val action = GameIO.input(false)[0]
 
             if (action == 1) {
                 val tempHP = target.health
@@ -54,10 +55,12 @@ class Adventure {
                 }
 
                 GameIO.output("${target.name}에게 ${tempHP - target.health}만큼 피해를 주었다.")
+                GameLog.writeLog("${target.name}를 공격")
             }
 
             if (target.isDead()) {
                 GameIO.output("${target.name}을/를 쓰러뜨렸다.")
+                GameLog.writeLog("${target.name}를 무찌름")
                 return
             }
 
@@ -69,6 +72,7 @@ class Adventure {
                 if (action != 1) {
                     player?.defense(target.damage)
                     GameIO.output("방어를 하였다.")
+                    GameLog.writeLog("방어")
                 } else {
                     target.attack(player!!)
                 }
@@ -86,6 +90,7 @@ class Adventure {
 
         private fun battleStep(entity: Entity?) {
             GameIO.output("${stage}에서 ${entity?.name}을 만났다.")
+            GameLog.writeLog("${entity?.name}과 전투")
             while (!entity?.isDead()!! && !player?.isDead()!!) {
                 battle(entity)
             }

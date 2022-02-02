@@ -16,13 +16,6 @@ class GameLog {
             gameLogs.addAll(logs)
         }
 
-        fun writeAdventureLog(logs: List<String>) {
-            for (select in logs) {
-                val msg = if (select == "1") "공격" else "방어"
-                gameLogs.add(msg)
-            }
-        }
-
         fun writeLog(log: String) {
             gameLogs.add(log)
         }

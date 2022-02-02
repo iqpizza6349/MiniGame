@@ -25,11 +25,15 @@ class FeedCat : IGame {
     companion object {
         private var cat: Cat ?= null
         private var box = false
+        private var fat = false
+        private var tooFat = false
     }
 
     override fun init() {
         // 고양이 선택하기
         box = false
+        fat = false
+        tooFat = false
         selectCat()
     }
 
@@ -41,7 +45,7 @@ class FeedCat : IGame {
         GameIO.output("너무나도 마음에 들었기에 데리고 키우기로 했다..", 1)
         GameIO.output("고양이 이름은 ${cat?.name}으로 지었다.", 1)
 
-        while (!cat?.isOldAge()!! && !cat?.isStarve()!! && !box) {
+        while (!cat?.isOldAge()!! && !cat?.isStarve()!! && !box && !tooFat) {
             // 자연사 혹은 아사를 하면 게임이 끝난다.
             gameStep()
         }
@@ -79,9 +83,23 @@ class FeedCat : IGame {
 
     override fun gameStep() {
         GameIO.output("${cat?.name}은 올해 ${cat?.age}살이 되었다.")
+        if (cat?.isFat()!! && !fat) {
+            GameIO.output("${cat?.name}은 비만이 되었습니다.")
+            GameIO.output("⚠ 비만은 건강에 치명적입니다.")
+            fat = true
+        }
+        else if (!cat?.isFat()!! && fat) {
+            fat = false
+        }
+
+        if (cat?.isFat()!! && (Math.random() * 10) > 0.73142) {
+            GameIO.output("${cat?.name}은 건강이 너무 악화되어 무지개다리를 건너고 말았습니다.")
+            tooFat = true
+            return
+        }
         for (i in 0..2) {
             GameIO.output("1. 먹이 주기, 2. 츄르 주기, 3. 장난감 투척, 4. 상자, 5. 휴식")
-            action(GameIO.input(true)[0])
+            action(GameIO.input(false)[0])
             if (box) {
                 return
             }
@@ -108,7 +126,7 @@ class FeedCat : IGame {
         GameIO.output("무엇을 먹이겠습니까")
         GameIO.output("1. 멸치, 2. 사료, 3. 츄르")
 
-        when (GameIO.input(true)[0]) {
+        when (GameIO.input(false)[0]) {
             1 -> cat?.feed(FoodType.ANCHOVY)
             2 -> cat?.feed(FoodType.FEED)
             3 -> cat?.feed(FoodType.CIAO)
@@ -127,7 +145,7 @@ class FeedCat : IGame {
         GameIO.output("무엇을 놀게 해주겠습니까")
         GameIO.output("1. 레이저포인터, 2. 실타래, 3. 깃털 낚시대, 4. 캣타워")
 
-        when (GameIO.input(true)[0]) {
+        when (GameIO.input(false)[0]) {
             1 -> cat?.action(ActionType.LASER)
             2 -> cat?.action(ActionType.SKEIN)
             3 -> cat?.action(ActionType.FEATHERROD)
@@ -157,7 +175,7 @@ class FeedCat : IGame {
             GameIO.output("${cat?.name}은 당신의 불찰로 인해 무지개다리를 건넜습니다..")
             GameIO.output("팁! 올해가 지나기전에 밥을 주면 아사를 면할 수 있습니다.")
         }
-        else {
+        else if (cat?.isOldAge()!!) {
             GameIO.output("${cat?.name}은 당신의 품에서 서서히 무지개다리로 향해갔습니다...")
             GameIO.output("${cat?.name}은 무지개다리에서도 당신을 기다릴 것입니다.")
         }
@@ -169,7 +187,7 @@ class FeedCat : IGame {
     override fun gameSave() {
         var text = if (box) {
             "${cat?.name}: 집사보다는 아늑한 상자가 더 좋다냥"
-        } else if (cat?.isStarve()!!) {
+        } else if (cat?.isStarve()!! || tooFat) {
             "${cat?.name}: 집사가 주인 죽이네..."
         } else {
             "${cat?.name}: 너와 함께여서 좋았어"

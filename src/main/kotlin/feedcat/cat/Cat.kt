@@ -65,6 +65,11 @@ interface Cat {
         // 아사인가
         return this.hunger < 0
     }
+    
+    fun isFat() : Boolean {
+        // 비만인가
+        return this.fat > 8
+    }
 
     private class GrassException(msg: String) : Exception(msg)
     private class NoDrugException(msg: String) : Exception(msg)
