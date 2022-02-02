@@ -21,7 +21,7 @@ class Map {
             monsterMap["사냥터"] = Monster(1, 8, 3, name = "SLIME")
             monsterMap["슬라임 서식지"] = Monster(3, 15, 4, name = "GUARD.SLIME")
             monsterMap["던전"] = Monster(5, 15, 6, name = "SKULL")
-            monsterMap["마왕이네"] = Devil(10, 40, 10, name = "BOSS")
+            monsterMap["마왕이네"] = Devil(10, 20, 10, name = "BOSS")
         }
 
         fun init() {

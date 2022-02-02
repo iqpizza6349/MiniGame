@@ -19,7 +19,7 @@ class Adventure {
 
         private var map = Map.map
         private var stageName = "마을"
-        private var stage = map[stageName]
+        var stage = map[stageName]
         private var player: Player ?= null
 
         fun init(player: Player) {
@@ -98,6 +98,9 @@ class Adventure {
                 }
                 stageName = findStage(stageName)
                 stage = map[stageName]
+                if (stage == "사냥터") {
+                    TextRPG.finish = true
+                }
             }
         }
 
@@ -110,6 +113,18 @@ class Adventure {
             }
         }
 
+        fun end() : String? {
+            if (gameOver()) {
+                GameIO.output("결국 ${Map.monsterMap[stage]?.name}에게 패배했다...")
+            }
+            else {
+                GameIO.output("당신은 마왕을 무찔렀다...하지만 폐허가 되버린 왕국을 다시 되돌리는 데 봉사하라는 왕국의 지시때문에")
+                GameIO.output("옆 왕국으로 이민을 갔다...")
+            }
+
+            GameIO.output("게임을 저장하시겠습니까? (Y/N)")
+            return readLine()
+        }
     }
 
 }

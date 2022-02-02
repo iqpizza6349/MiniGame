@@ -65,7 +65,7 @@ class GameIO {
 
             text += "\n" + GameLog.readLogs()
 
-            GameSave.save(GameInfo.getGameName(game), text)
+            GameSave.save(gameName, text)
         }
 
         fun levelUp(level: Int) {
@@ -74,7 +74,7 @@ class GameIO {
             line()
         }
 
-        fun line() {
+        private fun line() {
             println("===========================")
         }
 

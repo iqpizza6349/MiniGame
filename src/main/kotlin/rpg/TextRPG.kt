@@ -1,7 +1,10 @@
 package rpg
 
+import game.GameInfo
 import game.GameName
 import game.IGame
+import game.save.GameLog
+import game.save.GameSave
 import rpg.entity.player.Player
 import rpg.map.Map
 
@@ -32,7 +35,7 @@ class TextRPG : IGame {
 
     override fun gameStart() {
 
-        while (!Adventure.gameOver()) {
+        while (!Adventure.gameOver() && !finish) {
             gameStep()
         }
 
@@ -48,10 +51,17 @@ class TextRPG : IGame {
     }
 
     override fun gameEnd(): String? {
-        TODO("Not yet implemented")
+        return Adventure.end()
     }
 
     override fun gameSave() {
-        TODO("Not yet implemented")
+        var text = if (Adventure.gameOver()) {
+            "${Map.monsterMap[Adventure.stage]?.name}에게 패배했습니다...\n"
+        } else {
+            "승리했습니다!\n"
+        }
+
+        text += "${GameLog.readLogs()}"
+        GameSave.save(GameInfo.getGameName(this), text)
     }
 }
