@@ -12,8 +12,19 @@ class GameLog {
     companion object {
         var gameLogs = arrayListOf<String>()
         
-        fun writeLog(logs: List<String>) {
+        fun writeLogs(logs: List<String>) {
             gameLogs.addAll(logs)
+        }
+
+        fun writeAdventureLog(logs: List<String>) {
+            for (select in logs) {
+                val msg = if (select == "1") "공격" else "방어"
+                gameLogs.add(msg)
+            }
+        }
+
+        fun writeLog(log: String) {
+            gameLogs.add(log)
         }
 
         fun readLogs() : List<String> {

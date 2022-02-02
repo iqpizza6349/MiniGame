@@ -86,6 +86,7 @@ class FeedCat : IGame {
                 return
             }
         }
+        cat?.addAge()
     }
 
     private fun action(action: Int) {
@@ -115,7 +116,11 @@ class FeedCat : IGame {
     }
     
     private fun feedGrass() {
-        cat?.feedCIAO()
+        try {
+            cat?.feedGrass()
+        } catch (e: Exception) {
+            GameIO.output(e.message!!)
+        }
     }
 
     private fun playWithToy() {
@@ -138,7 +143,8 @@ class FeedCat : IGame {
 
     private fun rest() {
         GameIO.output("휴식을 취했습니다.", 1)
-        val restPoint = (Math.random() * 5).toInt() // 0 ~ 5
+        val restPoint = (Math.random() * 4).toInt() + 1 // 1 ~ 5
+        cat?.rest(restPoint)
         GameIO.output("${cat?.name}은 ${restPoint}만큼 배가 고파졌습니다.")
     }
 
@@ -161,15 +167,12 @@ class FeedCat : IGame {
     }
 
     override fun gameSave() {
-        var text: String? = null
-        if (box) {
-            text = "${cat?.name}: 집사보다는 아늑한 상자가 더 좋다냥"
-        }
-        else if (cat?.isStarve()!!) {
-            text = "${cat?.name}: 집사가 주인 죽이네..."
-        }
-        else {
-            text = "${cat?.name}: 너와 함께여서 좋았어"
+        var text = if (box) {
+            "${cat?.name}: 집사보다는 아늑한 상자가 더 좋다냥"
+        } else if (cat?.isStarve()!!) {
+            "${cat?.name}: 집사가 주인 죽이네..."
+        } else {
+            "${cat?.name}: 너와 함께여서 좋았어"
         }
 
         text += "\n${GameLog.readLogs()}"

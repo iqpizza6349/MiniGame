@@ -2,6 +2,7 @@ package feedcat.cat
 
 import feedcat.action.ActionType
 import feedcat.food.FoodType
+import game.save.GameLog
 
 interface Cat {
 
@@ -18,30 +19,41 @@ interface Cat {
     var age: Int
 
     fun feed(food: FoodType) {
-        if (food == FoodType.CIAO) {
-            throw GrassException("츄르 먹이는 따로 해줘야합니다.")
+        if (food == FoodType.CATGRASS) {
+            throw GrassException("고양이 풀은 따로 해줘야합니다.")
         }
+
+        GameLog.writeLog(food.foodName)
 
         this.fat += food.fatPoint
         this.hunger += food.hungerPoint
     }
 
-    fun feedCIAO() {
+    fun feedGrass() {
         if (!favorGrass) {
-            throw NoDrugException("${name}은/는 츄르를 좋아하지 않습니다.")
+            throw NoDrugException("${name}은/는 고양이풀를 좋아하지 않습니다.")
         }
-        
-        this.fat += FoodType.CIAO.fatPoint
-        this.hunger += FoodType.CIAO.hungerPoint
+
+        GameLog.writeLog(FoodType.CATGRASS.foodName)
+
+        this.fat += FoodType.CATGRASS.fatPoint
+        this.hunger += FoodType.CATGRASS.hungerPoint
     }
 
     fun action(actionType: ActionType) {
+        GameLog.writeLog(actionType.actionName)
+
         this.fat -= actionType.fatPoint
         this.hunger -= actionType.hungerPoint
     }
 
     fun rest(hunger: Int) {
+        GameLog.writeLog("휴식")
         this.hunger -= hunger
+    }
+
+    fun addAge() {
+        this.age++
     }
 
     fun isOldAge() : Boolean {

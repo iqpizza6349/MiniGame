@@ -12,7 +12,7 @@ class GameIO {
         fun input(isLog: Boolean) : List<Int> {
             val values: List<String> = readLine()?.split(" ") ?: return arrayListOf()
             if (isLog) {
-                GameLog.writeLog(values)
+                GameLog.writeLogs(values)
             }
             val integers = arrayListOf(-1)
             integers.clear()
